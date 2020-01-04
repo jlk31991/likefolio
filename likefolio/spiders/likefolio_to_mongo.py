@@ -34,36 +34,40 @@ class CPISpider(Spider):
     def navigate(self, response):
         baseurl = "https://dashboard.likefolio.com/"
         pagelist = {
-            # "companies/1986/daily_pi.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            # "companies/1986/daily_sentiment.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            # "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            "companies/1986/daily"
+            "companies/1986/daily_pi.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            "companies/1986/daily_sentiment.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            # "companies/1986/daily"
         }
         for page in pagelist:
             # print(page)
             yield Request(url=baseurl + page, callback=self.scrape_pages)
 
     def scrape_pages(self, response):
-        #        open_in_browser(response)
+
         # logging.error("response", response)
         # print(response)
-        item = LikefolioItem()
-        item["data"] = response.xpath("/html/body/pre/text()[1]").get()
+
+        # item = LikefolioItem()
+
+        # item["data"] = response.xpath("/html/body/pre/text()[1]").get()
         # item["data"] = response.xpath(
         #    "/html/body/div[4]/div/div/div[2]/div[1]/h4/span[2]"
         # )
-        yield item
-        # jsonresponse = json.loads(response.body_as_unicode())
 
-        # for user in jsonresponse:
-        # loader = ItemLoader(item=LikefolioItem())
-        # loader.deafult_input_processor = MapCompose(str)
-        # loader.default_output_processor = Join(" ")
+        # yield item
 
-        # for (field, path) in self.cpi_paths.items():
-        #    loader.add_value(field, SelectJmes(path)(user))
+        jsonresponse = json.loads(response.body_as_unicode())
 
-        # yield loader.load_item
+        for user in jsonresponse:
+            loader = ItemLoader(item=LikefolioItem())
+            loader.deafult_input_processor = MapCompose(str)
+            loader.default_output_processor = Join(" ")
+
+        for (field, path) in self.cpi_paths.items():
+            loader.add_value(field, SelectJmes(path)(user))
+
+        yield loader.load_item
 
 
 # EXAMPLE OF USING ITEMS
