@@ -5,11 +5,11 @@ from scrapy import Spider
 from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
-from likefolio.items import CPIMongoItem
+from likefolio.items import MentionsMongoItem
 
 
-class CPIMongoSpider(scrapy.Spider):
-    name = "cpi_mongo"
+class MentionsMongoSpider(scrapy.Spider):
+    name = "mentions_mongo"
     allowed_domains = ["dashboard.likefolio.com"]
     start_urls = ["https://dashboard.likefolio.com/users/sign_in"]
 
@@ -28,9 +28,9 @@ class CPIMongoSpider(scrapy.Spider):
     def navigate(self, response):
         baseurl = "https://dashboard.likefolio.com/"
         pagelist = [
-            "companies/1986/daily_pi.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            # "companies/1986/daily_pi.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
             # "companies/1986/daily_sentiment.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            # "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
         ]
         for page in pagelist:
             yield Request(url=baseurl + page, callback=self.scrape_pages)
@@ -45,8 +45,8 @@ class CPIMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            cpiItem = CPIMongoItem()
-            cpiItem['date'] = value['date']
-            cpiItem['value'] = value['value']
+            mentionsItem = MentionsMongoItem()
+            mentionsItem['date'] = value['date']
+            mentionsItem['value'] = value['value']
 
-            yield cpiItem
+            yield mentionsItem

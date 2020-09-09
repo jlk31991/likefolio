@@ -64,7 +64,14 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {"likefolio.pipelines.LikefolioPipeline": 300}
+ITEM_PIPELINES = {
+    "likefolio.pipelines.CPIMongoPipeline": 300,
+    "likefolio.pipelines.MongoDBPipeline": 50,
+    "likefolio.pipelines.SentimentMongoPipeline": 300,
+    "likefolio.pipelines.MongoDBSentimentPipeline": 50,
+    "likefolio.pipelines.MentionsMongoPipeline": 300,
+    "likefolio.pipelines.MongoDBMentionsPipeline": 50,
+    }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

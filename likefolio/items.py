@@ -7,16 +7,26 @@
 
 import scrapy
 
+#added this 20200827
+from scrapy.item import Item, Field
 
-class LikefolioItem(scrapy.Item):
+class CPIMongoItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    # cpi = scrapy.Field()
-    # sentiment = scrapy.Field()
-    # mentions = scrapy.Field()
-    data = scrapy.Field()
 
-# date = scrapy.Field()
-# value = scrapy.Field()
-# price = scrapy.Field()
+    date = scrapy.Field()
+    value = scrapy.Field()
 
+    pass
+
+class SentimentMongoItem(scrapy.Item):
+    date = scrapy.Field()
+    positive = scrapy.Field()
+    negative = scrapy.Field()
+
+    pass
+
+class MentionsMongoItem(scrapy.Item):
+    date = scrapy.Field()
+    value = scrapy.Field()
+    
+    pass
