@@ -15,6 +15,10 @@ class CPIMongoItem(scrapy.Item):
 
     date = scrapy.Field()
     value = scrapy.Field()
+    name = scrapy.Field()
+    displayName = scrapy.Field()
+    displayType = scrapy.Field()
+    data = scrapy.Field()
 
     pass
 
@@ -22,11 +26,19 @@ class SentimentMongoItem(scrapy.Item):
     date = scrapy.Field()
     positive = scrapy.Field()
     negative = scrapy.Field()
+    name = scrapy.Field()
+    displayName = scrapy.Field()
+    displayType = scrapy.Field()
+    data = scrapy.Field()
 
     pass
 
 class MentionsMongoItem(scrapy.Item):
     date = scrapy.Field()
     value = scrapy.Field()
+    name = scrapy.Field()
+    displayName = scrapy.Field()
+    displayType = scrapy.Field()
+    data = scrapy.Field()
     
     pass

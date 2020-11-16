@@ -5,11 +5,11 @@ from scrapy import Spider
 from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
-from likefolio.items import MentionsMongoItem
+from likefolio.items import SentimentMongoItem
 
 
-class MentionsMongoSpider(scrapy.Spider):
-    name = "mentions_mongo"
+class SentimentMongoSpider(scrapy.Spider):
+    name = "psentiment_mongo"
     allowed_domains = ["dashboard.likefolio.com"]
     start_urls = ["https://dashboard.likefolio.com/users/sign_in"]
 
@@ -29,8 +29,8 @@ class MentionsMongoSpider(scrapy.Spider):
         baseurl = "https://dashboard.likefolio.com/"
         pagelist = [
             # "companies/1986/daily_pi.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            # "companies/1986/daily_sentiment.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
-            "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            "companies/1986/daily_sentiment.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
+            # "companies/1986/daily_mentions.json?apply_corrections=yes&avg_size=90&display_avg=yes&display_daily=no&display_price=yes&period=all&show_annotations=no",
         ]
         for page in pagelist:
             yield Request(url=baseurl + page, callback=self.scrape_pages)
@@ -42,17 +42,32 @@ class MentionsMongoSpider(scrapy.Spider):
 #        return test
 
     def scrape_pages (self, response):
-        mentionsItem = MentionsMongoItem()
+        sentimentItem = SentimentMongoItem()
         data = []
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['value']])
-#            mentionsItem['date'] = value['date']
-#            mentionsItem['value'] = value['value']
-        mentionsItem['name'] = 'daily_mentions'
-        mentionsItem['displayName'] = 'Daily Mentions'
-        mentionsItem['displayType'] = 'line'
-        mentionsItem['data'] = data
+            data.append([value['date'], value['positive']])
+        sentimentItem['name'] = 'daily_p_sentiment'
+        sentimentItem['displayName'] = 'Daily Positive Sentiment'
+        sentimentItem['displayType'] = 'area'
+        sentimentItem['data'] = data
 
-        yield mentionsItem
+#            sentimentItem['date'] = value['date']
+#            sentimentItem['positive'] = value['positive']
+#            sentimentItem['negative'] = value['negative']
+
+        yield sentimentItem
+
+#    def scrap_pages (self,response):
+#        sentimentItem=SentimentMongoItem()
+#        data = []
+#        body = json.loads(response.body)
+#        for value in body['data']:
+#            data.append([value['date'], value['negative']])
+#        sentimentItem['name'] = 'daily_n_sentiment'
+#        sentimentItem['displayName'] = 'Daily Negative Sentiment'
+#        sentimentItem['displayType'] = 'line'
+#        sentimentItem['data'] = data
+
+#        yield sentimentItem

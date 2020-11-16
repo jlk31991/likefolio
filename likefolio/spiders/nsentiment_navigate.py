@@ -9,7 +9,7 @@ from likefolio.items import SentimentMongoItem
 
 
 class SentimentMongoSpider(scrapy.Spider):
-    name = "sentiment_mongo"
+    name = "nsentiment_mongo"
     allowed_domains = ["dashboard.likefolio.com"]
     start_urls = ["https://dashboard.likefolio.com/users/sign_in"]
 
@@ -42,12 +42,15 @@ class SentimentMongoSpider(scrapy.Spider):
 #        return test
 
     def scrape_pages (self, response):
+        sentimentItem = SentimentMongoItem()
+        data = []
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            sentimentItem = SentimentMongoItem()
-            sentimentItem['date'] = value['date']
-            sentimentItem['positive'] = value['positive']
-            sentimentItem['negative'] = value['negative']
+            data.append([value['date'], value['negative']])
+        sentimentItem['name'] = 'daily_n_sentiment'
+        sentimentItem['displayName'] = 'Daily Negative Sentiment'
+        sentimentItem['displayType'] = 'area'
+        sentimentItem['data'] = data
 
-            yield sentimentItem
+        yield sentimentItem

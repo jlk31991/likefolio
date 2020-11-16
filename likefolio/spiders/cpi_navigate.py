@@ -42,11 +42,17 @@ class CPIMongoSpider(scrapy.Spider):
 #        return test
 
     def scrape_pages (self, response):
+        cpiItem = CPIMongoItem()
+        data = []
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            cpiItem = CPIMongoItem()
-            cpiItem['date'] = value['date']
-            cpiItem['value'] = value['value']
+#            cpiItem['date'] = value['date']
+#            cpiItem['value'] = value['value']
+            data.append([value['date'], value['value']])
+        cpiItem['name'] = 'daily_cpi'
+        cpiItem['displayName'] = 'Daily CPI'
+        cpiItem['displayType'] = 'line'
+        cpiItem['data'] = data
 
-            yield cpiItem
+        yield cpiItem
