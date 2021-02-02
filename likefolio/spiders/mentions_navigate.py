@@ -1,6 +1,8 @@
 import scrapy
 import json
 
+from datetime import datetime, timezone
+
 from scrapy import Spider
 from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
@@ -47,7 +49,11 @@ class MentionsMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['value']])
+             dt = datetime(
+                int( value['date'].split('-')[0] ),
+                int( value['date'].split('-')[1] ),
+                int( value['date'].split('-')[2] )).timestamp()
+            data.append([dt, value['value']])
 #            mentionsItem['date'] = value['date']
 #            mentionsItem['value'] = value['value']
         mentionsItem['name'] = 'daily_mentions'

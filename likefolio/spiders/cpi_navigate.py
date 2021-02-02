@@ -1,6 +1,11 @@
 import scrapy
 import json
 
+
+import pdb
+
+from datetime import datetime, timezone
+
 from scrapy import Spider
 from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
@@ -47,12 +52,18 @@ class CPIMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
+            dt = datetime(
+                int( value['date'].split('-')[0] ),
+                int( value['date'].split('-')[1] ),
+                int( value['date'].split('-')[2] )).timestamp()
+            # pdb.set_trace()
 #            cpiItem['date'] = value['date']
 #            cpiItem['value'] = value['value']
-            data.append([value['date'], value['value']])
+            data.append([dt, value['value']])
         cpiItem['name'] = 'daily_cpi'
         cpiItem['displayName'] = 'Daily CPI'
         cpiItem['displayType'] = 'line'
         cpiItem['data'] = data
 
         yield cpiItem
+

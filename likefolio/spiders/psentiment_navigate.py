@@ -1,6 +1,8 @@
 import scrapy
 import json
 
+from datetime import datetime, timezone
+
 from scrapy import Spider
 from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
@@ -47,7 +49,11 @@ class SentimentMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['positive']])
+            dt = datetime(
+                int( value['date'].split('-')[0] ),
+                int( value['date'].split('-')[1] ),
+                int( value['date'].split('-')[2] )).timestamp()
+            data.append([dt, value['positive']])
         sentimentItem['name'] = 'daily_p_sentiment'
         sentimentItem['displayName'] = 'Daily Positive Sentiment'
         sentimentItem['displayType'] = 'area'
