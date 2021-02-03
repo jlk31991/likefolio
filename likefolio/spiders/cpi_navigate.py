@@ -6,6 +6,7 @@ from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
 from likefolio.items import CPIMongoItem
+from datetime import datetime
 
 
 class CPIMongoSpider(scrapy.Spider):
@@ -47,12 +48,20 @@ class CPIMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-#            cpiItem['date'] = value['date']
-#            cpiItem['value'] = value['value']
-            data.append([value['date'], value['value']])
-        cpiItem['name'] = 'daily_cpi'
-        cpiItem['displayName'] = 'Daily CPI'
-        cpiItem['displayType'] = 'line'
-        cpiItem['data'] = data
+            dt = datetime(
+                int(value['date'].split('-')[0]),
+                int(value['date'].split('-')[1]),
+                int(value['date'].split('-')[2])
+            ).timestamp()
+            data.append([dt, value['value']])
+        cpiItem['internalName'] = 'daily_cpi'
+        cpiItem['name'] = 'Daily CPI'
+        cpiItem['total'] = value['value']
+        cpiItem['change'] = '3%'
+        cpiItem['frequency'] = 'Daily'
+        cpiItem['expectations'] = 'null'
+        cpiItem['visualizationType'] = 'xy'
+        cpiItem['visualizationData'] = data
+        cpiItem['topic'] = 'Tesla'
 
         yield cpiItem

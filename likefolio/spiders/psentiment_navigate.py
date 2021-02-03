@@ -6,6 +6,7 @@ from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
 from likefolio.items import SentimentMongoItem
+from datetime import datetime
 
 
 class SentimentMongoSpider(scrapy.Spider):
@@ -47,27 +48,21 @@ class SentimentMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['positive']])
-        sentimentItem['name'] = 'daily_p_sentiment'
-        sentimentItem['displayName'] = 'Daily Positive Sentiment'
-        sentimentItem['displayType'] = 'area'
-        sentimentItem['data'] = data
+            dt = datetime(
+                int(value['date'].split('-')[0]),
+                int(value['date'].split('-')[1]),
+                int(value['date'].split('-')[2])
+            ).timestamp()
+            data.append([dt, value['positive']])
+        sentimentItem['internalName'] = 'daily_p_sentiment'
+        sentimentItem['name'] = 'Daily Positive Sentiment'
+        sentimentItem['total'] = value['positive']
+        sentimentItem['change'] = '3%'
+        sentimentItem['frequency'] = 'Daily'
+        sentimentItem['expectations'] = 'null'
+        sentimentItem['visualizationType'] = 'xy'
+        sentimentItem['visualizationData'] = data
+        sentimentItem['topic'] = 'Tesla'
 
-#            sentimentItem['date'] = value['date']
-#            sentimentItem['positive'] = value['positive']
-#            sentimentItem['negative'] = value['negative']
 
         yield sentimentItem
-
-#    def scrap_pages (self,response):
-#        sentimentItem=SentimentMongoItem()
-#        data = []
-#        body = json.loads(response.body)
-#        for value in body['data']:
-#            data.append([value['date'], value['negative']])
-#        sentimentItem['name'] = 'daily_n_sentiment'
-#        sentimentItem['displayName'] = 'Daily Negative Sentiment'
-#        sentimentItem['displayType'] = 'line'
-#        sentimentItem['data'] = data
-
-#        yield sentimentItem

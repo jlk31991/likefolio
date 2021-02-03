@@ -6,7 +6,7 @@ from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
 from likefolio.items import MentionsMongoItem
-
+from datetime import datetime
 
 class MentionsMongoSpider(scrapy.Spider):
     name = "mentions_mongo"
@@ -47,12 +47,20 @@ class MentionsMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['value']])
-#            mentionsItem['date'] = value['date']
-#            mentionsItem['value'] = value['value']
-        mentionsItem['name'] = 'daily_mentions'
-        mentionsItem['displayName'] = 'Daily Mentions'
-        mentionsItem['displayType'] = 'line'
-        mentionsItem['data'] = data
+            dt = datetime(
+                int(value['date'].split('-')[0]),
+                int(value['date'].split('-')[1]),
+                int(value['date'].split('-')[2])
+            ).timestamp()
+            data.append([dt, value['value']])
+        mentionsItem['internalName'] = 'daily_mentions'
+        mentionsItem['name'] = 'Daily Mentions'
+        mentionsItem['total'] = value['value']
+        mentionsItem['change'] = '3%'
+        mentionsItem['frequency'] = 'Daily'
+        mentionsItem['expectations'] = 'null'
+        mentionsItem['visualizationType'] = 'xy'
+        mentionsItem['visualizationData'] = data
+        mentionsItem['topic'] = 'Tesla'
 
         yield mentionsItem

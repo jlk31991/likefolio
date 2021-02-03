@@ -6,6 +6,7 @@ from scrapy.http import FormRequest
 from scrapy.utils.response import open_in_browser
 from scrapy import Request
 from likefolio.items import SentimentMongoItem
+from datetime import datetime
 
 
 class SentimentMongoSpider(scrapy.Spider):
@@ -47,10 +48,20 @@ class SentimentMongoSpider(scrapy.Spider):
         body = json.loads(response.body)
 #        return body
         for value in body['data']:
-            data.append([value['date'], value['negative']])
-        sentimentItem['name'] = 'daily_n_sentiment'
-        sentimentItem['displayName'] = 'Daily Negative Sentiment'
-        sentimentItem['displayType'] = 'area'
-        sentimentItem['data'] = data
+            dt = datetime(
+                int(value['date'].split('-')[0]),
+                int(value['date'].split('-')[1]),
+                int(value['date'].split('-')[2])
+            ).timestamp()
+            data.append([dt, value['negative']])
+        sentimentItem['internalName'] = 'daily_n_sentiment'
+        sentimentItem['name'] = 'Daily Negative Sentiment'
+        sentimentItem['total'] = value['negative']
+        sentimentItem['change'] = '3%'
+        sentimentItem['frequency'] = 'Daily'
+        sentimentItem['expectations'] = 'null'
+        sentimentItem['visualizationType'] = 'xy'
+        sentimentItem['visualizationData'] = data
+        sentimentItem['topic'] = 'Tesla'
 
         yield sentimentItem

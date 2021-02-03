@@ -15,10 +15,15 @@ class CPIMongoItem(scrapy.Item):
 
     date = scrapy.Field()
     value = scrapy.Field()
+    internalName = scrapy.Field()
     name = scrapy.Field()
-    displayName = scrapy.Field()
-    displayType = scrapy.Field()
-    data = scrapy.Field()
+    total = scrapy.Field()
+    change = scrapy.Field()
+    frequency = scrapy.Field()
+    expectations = scrapy.Field()
+    visualizationType = scrapy.Field()
+    visualizationData = scrapy.Field()
+    topic = scrapy.Field()
 
     pass
 
@@ -26,19 +31,29 @@ class SentimentMongoItem(scrapy.Item):
     date = scrapy.Field()
     positive = scrapy.Field()
     negative = scrapy.Field()
+    internalName = scrapy.Field()
     name = scrapy.Field()
-    displayName = scrapy.Field()
-    displayType = scrapy.Field()
-    data = scrapy.Field()
+    total = scrapy.Field()
+    change = scrapy.Field()
+    frequency = scrapy.Field()
+    expectations = scrapy.Field()
+    visualizationType = scrapy.Field()
+    visualizationData = scrapy.Field()
+    topic = scrapy.Field()
 
     pass
 
 class MentionsMongoItem(scrapy.Item):
     date = scrapy.Field()
     value = scrapy.Field()
+    internalName= scrapy.Field()
     name = scrapy.Field()
-    displayName = scrapy.Field()
-    displayType = scrapy.Field()
-    data = scrapy.Field()
+    total = scrapy.Field()
+    change = scrapy.Field()
+    frequency = scrapy.Field()
+    expectations = scrapy.Field()
+    visualizationType = scrapy.Field()
+    visualizationData = scrapy.Field()
+    topic = scrapy.Field()
     
     pass
