@@ -53,7 +53,8 @@ class SentimentMongoSpider(scrapy.Spider):
                 int(value['date'].split('-')[1]),
                 int(value['date'].split('-')[2])
             ).timestamp()
-            data.append([dt, value['negative']])
+            ms = dt * 1000
+            data.append([ms, value['negative']])
         sentimentItem['internalName'] = 'daily_n_sentiment'
         sentimentItem['name'] = 'Daily Negative Sentiment'
         sentimentItem['total'] = value['negative']

@@ -52,7 +52,8 @@ class MentionsMongoSpider(scrapy.Spider):
                 int(value['date'].split('-')[1]),
                 int(value['date'].split('-')[2])
             ).timestamp()
-            data.append([dt, value['value']])
+            ms = dt * 1000
+            data.append([ms, value['value']])
         mentionsItem['internalName'] = 'daily_mentions'
         mentionsItem['name'] = 'Daily Mentions'
         mentionsItem['total'] = value['value']

@@ -53,7 +53,8 @@ class CPIMongoSpider(scrapy.Spider):
                 int(value['date'].split('-')[1]),
                 int(value['date'].split('-')[2])
             ).timestamp()
-            data.append([dt, value['value']])
+            ms = dt * 1000
+            data.append([ms, value['value']])
         cpiItem['internalName'] = 'daily_cpi'
         cpiItem['name'] = 'Daily CPI'
         cpiItem['total'] = value['value']
