@@ -55,7 +55,7 @@ class MentionsMongoSpider(scrapy.Spider):
             ms = dt * 1000
             data.append([ms, value['value']])
         mentionsItem['internalName'] = 'daily_mentions'
-        mentionsItem['name'] = 'Daily Mentions'
+        mentionsItem['name'] = 'Twitter Mentions'
         mentionsItem['total'] = value['value']
         mentionsItem['change'] = '3%'
         mentionsItem['frequency'] = 'Daily'

@@ -1,5 +1,11 @@
 import scrapy
 import json
+#import pandas as pd
+
+#import sys
+#sys.path.append('code/git')
+#sys.path.remove('/opt/anaconda3/lib/python3.7/site-packages')
+#print(sys.path)
 
 from scrapy import Spider
 from scrapy.http import FormRequest
@@ -55,9 +61,12 @@ class CPIMongoSpider(scrapy.Spider):
             ).timestamp()
             ms = dt * 1000
             data.append([ms, value['value']])
+            #added 3/5
+ #           pctchg=data.pct_change()
         cpiItem['internalName'] = 'daily_cpi'
-        cpiItem['name'] = 'Daily CPI'
+        cpiItem['name'] = 'Consumer Purchase Intent'
         cpiItem['total'] = value['value']
+#        cpiItem['change'] = pctchg
         cpiItem['change'] = '3%'
         cpiItem['frequency'] = 'Daily'
         cpiItem['expectations'] = 'null'
@@ -66,3 +75,5 @@ class CPIMongoSpider(scrapy.Spider):
         cpiItem['topic'] = 'Tesla'
 
         yield cpiItem
+
+   

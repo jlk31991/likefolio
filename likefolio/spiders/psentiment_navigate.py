@@ -56,7 +56,7 @@ class SentimentMongoSpider(scrapy.Spider):
             ms = dt * 1000
             data.append([ms, value['positive']])
         sentimentItem['internalName'] = 'daily_p_sentiment'
-        sentimentItem['name'] = 'Daily Positive Sentiment'
+        sentimentItem['name'] = 'Positive Tweets'
         sentimentItem['total'] = value['positive']
         sentimentItem['change'] = '3%'
         sentimentItem['frequency'] = 'Daily'
